@@ -19,8 +19,7 @@ class DatabaseSeeder extends Seeder
         PanelSeeder::class,  // Línea para llamar al seeder de Panel
     ]);
         User::factory()->create([   
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            
         ]);
     }
 }
