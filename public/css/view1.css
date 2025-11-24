@@ -74,17 +74,17 @@
 /* --- DECLARACIÓN DE IMÁGENES (CONSOLIDADA) --- */
 #mundo-real {
     /* Ruta corregida: asumiendo que "img" es la carpeta y el CSS está fuera */
-    background-image: url('img/1st view.png');
+    background-image: url("../img/view1.png");
 }
  
 #upside-down {
     /* Ruta corregida: asumiendo que "img" es la carpeta y el CSS está fuera */
-    background-image: url('img/View 2.png');
+    background-image: url("../img/view2.png");
 }
  
 #crack {
     /* Ruta corregida: asumiendo que "img" es la carpeta y el CSS está fuera */
-    background-image: url('img/grieta_sola.png');
+    background-image: url("../img/grieta_sola.png");
 }
  
  
@@ -105,3 +105,75 @@
     opacity: 0;
     pointer-events: none;
 }
+
+/* Nuevo estilo para el Título Centrado */
+.centered-title {
+    position: absolute;
+    /* Centra horizontalmente */
+    left: 50%;
+    /* Ajusta la posición vertical (e.g., al 15% de la altura de la pantalla) */
+    top: 25%; 
+    /* Mueve el elemento 50% de su propio ancho/alto hacia arriba/izquierda para centrarlo */
+    transform: translate(-50%, -50%); 
+    z-index: 10;
+    
+    /* Estilo adicional para que se vea como un título grande */
+    font-size: 5em; /* Puedes ajustar el tamaño */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* El texto del título usa la clase existente */
+.centered-title .stranger-things-text {
+    text-shadow: 0 0 10px #000000, 0 0 20px #000000; 
+}
+
+/* Estilo del Formulario: Centra el contenedor y usa Flexbox */
+#upside-down form {
+    /* Elimina el posicionamiento del botón y lo aplica al formulario */
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%); /* Centra el formulario completo */
+    
+    display: flex; /* Coloca los elementos uno al lado del otro */
+    align-items: center; /* Alineación vertical */
+    gap: 20px; /* Espacio entre el input y el botón */
+    z-index: 10;
+}
+
+/* Modificación de #botonjugar: Debe ser estático ahora */
+#botonjugar{
+    /* Quitar el posicionamiento absoluto que ya no es necesario */
+    position: static; 
+    transform: none; 
+    
+    /* El resto de los estilos visuales se mantienen */
+    cursor: pointer;
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 3px solid #e20000;
+    border-radius: 10px;
+}
+
+/* Estilo del Cuadro de Texto */
+#cuadrotexto{
+    /* Fondo semi-transparente y borde del botón */
+    background: rgba(0, 0, 0, 0.7);
+    border: 3px solid #e20000;
+    border-radius: 10px;
+    padding: 15px 30px; /* Mismo padding para que el alto sea igual */
+    
+    /* Color del texto (coincide con el neón rojo) */
+    color: #e20000;
+    
+    /* Ajuste para que el texto del placeholder también sea rojo */
+    font-size: 1.2em; /* Haz la fuente legible */
+}
+
+/* Selector específico para asegurar que el placeholder sea visible y rojo */
+#cuadrotexto::placeholder {
+    color: #e20000;
+    opacity: 0.7; /* Ligeramente más tenue que el texto escrito */
+}
+
