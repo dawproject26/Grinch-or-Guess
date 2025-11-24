@@ -8,7 +8,7 @@ use App\Http\Controllers\ProfileController;
 fundamental para definir todas las URLs. */ 
 use Illuminate\Support\Facades\Route;
 
-/* Importa el controlador PlayerController que usarás para 
+/* Importa el controlador PlayerController que usarás para -
 manejar la lógica de registro e inicio de sesión específica 
 de los jugadores. */
 use App\Http\Controllers\PlayerController;
@@ -52,7 +52,7 @@ Route::get('/index',[PanelController::class,'index'])->name('panel.index');
 /* Ruta GET para mostrar el panel principal del juego (donde estará la ruleta y la frase). 
 Llama al método 'index' del PanelController. */ 
 Route::post('/panel/store',[PanelController::class,'store'])->name('panel.store');
-
+Route::post('/panel/check', [PanelController::class, 'checkLetter'])->name('panel.check');
 
 Route::middleware('auth')->group(function () {
    
