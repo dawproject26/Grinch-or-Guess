@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Player;
@@ -22,7 +21,10 @@ class PlayerController extends Controller
             return back()->with('error', 'Jugador no encontrado');
         }
 
-        session(['player_id' => $player->id]);
+        session([
+            'player_id' => $player->id,
+            'player_name' => $player->name
+        ]);
 
         return redirect()->route('wheelfireclub.panel');
     }
@@ -43,14 +45,17 @@ class PlayerController extends Controller
             'seconds' => 120
         ]);
 
-        session(['player_id' => $player->id]);
+        session([
+            'player_id' => $player->id,
+            'player_name' => $player->name
+        ]);
 
         return redirect()->route('wheelfireclub.panel');
     }
 
     public function logout()
     {
-        session()->forget('player_id');
+        session()->forget(['player_id', 'player_name']);
         return redirect()->route('welcome');
     }
 }

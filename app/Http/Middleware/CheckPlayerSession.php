@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -11,6 +12,7 @@ class CheckPlayerSession
         if (!session()->has('player_id')) {
             return redirect('/');
         }
+
         return $next($request);
     }
 }

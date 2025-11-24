@@ -6,23 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    // database/migrations/xxxx_create_phrases_table.php
-    public function up()
+    public function up(): void
     {
         Schema::create('phrases', function (Blueprint $table) {
             $table->id();
-            $table->string('movie');
+            $table->foreignId('panel_id')->constrained('panels')->onDelete('cascade');
             $table->text('phrase');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('phrases');

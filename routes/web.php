@@ -6,6 +6,7 @@ use App\Http\Controllers\PanelController;
 use App\Http\Controllers\RouletteController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\TimerController;
+use App\Http\Middleware\CheckPlayerSession;
 
 Route::get('/', [PlayerController::class, 'welcome'])->name('welcome');
 Route::post('/login', [PlayerController::class, 'login'])->name('player.login');
