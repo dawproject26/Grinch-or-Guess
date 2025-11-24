@@ -1,0 +1,107 @@
+/* Estilos generales */
+.scene-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+ 
+.world {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 1s ease;
+}
+ 
+/* Estilo para la grieta */
+#crack {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+    z-index: 5; /* Asegura que la grieta está por encima de los mundos */
+   
+    /* === CLAVE: Inicialmente, la grieta es muy estrecha === */
+    clip-path: polygon(48% 0, 52% 0, 52% 100%, 48% 100%);
+    transition: clip-path 1.5s ease-in-out;
+}
+ 
+/* El Mundo del Revés está oculto al inicio */
+#upside-down {
+    opacity: 0;
+}
+ 
+/* Estilos para el botón */
+.centered-button {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 3px solid #e20000;
+    border-radius: 10px;
+    z-index: 10; /* Asegura que el botón está por encima de todo */
+}
+ 
+.centered-button2 {
+    position: absolute;
+    top: 50%;
+    right: 15%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 3px solid #e20000;
+    border-radius: 10px;
+    z-index: 10; /* Asegura que el botón está por encima de todo */
+}
+ 
+ 
+ 
+.stranger-things-text {
+    /* Aquí usarías tu fuente ITC Benguiat y el efecto neón */
+    font-family: 'ITC Benguiat', serif;
+    color: #e20000;
+    text-shadow: 0 0 10px #e20000;
+}
+ 
+/* --- DECLARACIÓN DE IMÁGENES (CONSOLIDADA) --- */
+#mundo-real {
+    /* Ruta corregida: asumiendo que "img" es la carpeta y el CSS está fuera */
+    background-image: url('img/1st view.png');
+}
+ 
+#upside-down {
+    /* Ruta corregida: asumiendo que "img" es la carpeta y el CSS está fuera */
+    background-image: url('img/View 2.png');
+}
+ 
+#crack {
+    /* Ruta corregida: asumiendo que "img" es la carpeta y el CSS está fuera */
+    background-image: url('img/grieta_sola.png');
+}
+ 
+ 
+/* === Estado de Apertura: Lo que ocurre al añadir la clase 'open' al contenedor === */
+.scene-container.open #crack {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+ 
+.scene-container.open #mundo-real {
+    opacity: 0;
+}
+ 
+.scene-container.open #upside-down {
+    opacity: 1;
+}
+ 
+.scene-container.open #open-gate-button {
+    opacity: 0;
+    pointer-events: none;
+}
