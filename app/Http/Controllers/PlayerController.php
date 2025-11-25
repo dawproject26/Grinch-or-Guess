@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Player;
@@ -10,7 +11,7 @@ class PlayerController extends Controller
 {
     public function welcome()
     {
-        return view('welcome');
+        return view('welcome'); // Asegúrate de que welcome.blade.php existe
     }
 
     public function login(Request $request)
@@ -26,7 +27,7 @@ class PlayerController extends Controller
             'player_name' => $player->name
         ]);
 
-        return redirect()->route('wheelfireclub.panel');
+        return redirect()->route('panel.index');
     }
 
     public function register(Request $request)
@@ -50,7 +51,7 @@ class PlayerController extends Controller
             'player_name' => $player->name
         ]);
 
-        return redirect()->route('wheelfireclub.panel');
+        return redirect()->route('panel.index');
     }
 
     public function logout()

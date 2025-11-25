@@ -111,3 +111,257 @@ body{
 .efecto-temporizador.rojo-claro{ color:#ff8b82; }     /* rojo claro */
 .efecto-temporizador.rojo-medio{ color:#ff4d4d; }     /* rojo medio */
 .efecto-temporizador.rojo-intenso{ color:#cc0018; }   /* rojo intenso */
+
+/* ---------------------------------- */
+/* ESTILOS CSS PARA POSICIONAMIENTO Y DISEÑO */
+/* ---------------------------------- */
+body {
+    /* Asegura que no haya márgenes predeterminados del body */
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+
+}
+
+/* Contenedor principal del abecedario */
+#alphabet-sidebar {
+    /* Fija el contenedor a la ventana del navegador */
+    position: fixed;
+    left: 10px;
+    /* Pegado o cerca del borde izquierdo */
+    top: 50%;
+    /* Mueve el borde superior al centro vertical */
+    transform: translateY(-50%);
+    /* Centra verticalmente el elemento */
+    padding: 10px;
+    /* Usamos CSS Grid para la estructura 4xN */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* Crea 4 columnas de igual ancho */
+    gap: 10px;
+    /* Espacio entre las teclas */
+    background: rgba(255, 255, 255, 0.05);
+    /* Opcional: fondo semitransparente */
+    border-radius: 10px;
+}
+
+/* Estilos para cada tecla (DIV) */
+.key-container {
+    width: 60px;
+    /* Ancho fijo para las imágenes de la tecla */
+    height: 60px;
+    /* Alto fijo */
+    cursor: pointer;
+    transition: opacity 0.2s;
+    /* Pequeña animación al hacer hover */
+}
+
+.key-container:hover:not(.disabled) {
+    opacity: 0.8;
+}
+
+.key-container.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    /* Opacidad reducida si ya se usó la tecla */
+}
+
+/* Estilo para la imagen dentro del DIV */
+.key-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Estilo para el área de mensajes de resultado */
+#result-display {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+}
+
+.panel-container {
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%);
+    width: 85%;
+    margin: auto;
+    height: 28rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    padding: 1.5rem;
+    align-content: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: 0.5rem solid #8b0000;
+    box-shadow: 
+        0 0 20px rgba(139, 0, 0, 0.7),
+        inset 0 0 30px rgba(139, 0, 0, 0.3),
+        0 0 0 2px #000,
+        0 0 0 4px #8b0000;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de luz roja parpadeante */
+.panel-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(139, 0, 0, 0.1) 0%, transparent 70%);
+    animation: flicker 4s infinite alternate;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+    75% { opacity: 0.4; }
+}
+
+.cabecera {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.titulo-panel {
+    margin: auto;
+    padding: 1rem 2rem;
+    font-family: 'Courier New', monospace;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff0000,
+        0 0 30px #ff0000;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #8b0000, #ff0000, #8b0000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    0% { 
+        text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+        filter: brightness(1);
+    }
+    100% { 
+        text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000;
+        filter: brightness(1.2);
+    }
+}
+
+.palabra {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    margin: 0 0.5rem;
+    padding: 0.3rem;
+    background: rgba(139, 0, 0, 0.1);
+    border-radius: 4px;
+    border: 1px solid rgba(139, 0, 0, 0.3);
+}
+
+.letra {
+    position: relative;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin: 0.2rem;
+    perspective: 1000px;
+}
+
+.postit {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 3px;
+    filter: sepia(0.3) brightness(0.9);
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.letra.revelada .postit {
+    transform: rotateY(180deg);
+    filter: sepia(0) brightness(1.1) hue-rotate(320deg);
+}
+
+.letra-texto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #e10000;
+    opacity: 0;
+    z-index: 10;
+    transition: opacity 0.1s 0.1s;
+    text-shadow: 
+        0 0 5px #e10000,
+        0 0 10px #e10000;
+    background: rgba(0, 20, 0, 0.3);
+    border-radius: 3px;
+    border: 1px solid rgba(0, 255, 0, 0.2);
+}
+
+.letra.revelada .letra-texto {
+    opacity: 1;
+    animation: letterGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes letterGlow {
+    0% { 
+        text-shadow: 0 0 5px #700000, 0 0 10px #700000;
+        box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+    100% { 
+        text-shadow: 0 0 8px #700000, 0 0 15px #700000, 0 0 20px #700000;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+}
+
+.espacio {
+    width: 1.5rem;
+    height: 3.5rem;
+    margin: 0.2rem;
+}
+
+/* Efecto de scan lines */
+.panel-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 0, 0.03) 2px,
+        rgba(0, 255, 0, 0.03) 4px
+    );
+    pointer-events: none;
+    animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
