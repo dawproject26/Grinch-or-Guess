@@ -17,6 +17,7 @@ Route::get('/register',[PlayerController::class,'register'])->name('player.regis
 
 Route::get('/panel', [PanelController::class, 'show']);
 
+Route::post('/panel/letra',[PanelController::class,'store'])->name('panel.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

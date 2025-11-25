@@ -4,26 +4,58 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Phrase;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class PanelController extends Controller
 {
-
-    private $phraseSeleccionada;
-    /**
-     * Muestra la vista principal
-     */
     public function show()
     {
-        //Peticion a BBDD que nos devuelve una phrase aleatoria
-        $this -> phraseSeleccionada = Phrase::inRandomOrder()->first();
+        $phraseSeleccionada = Phrase::inRandomOrder()->first();
 
-        //Devolvemos la phrase seleccionada y es el html el que se encarga de mostrar los espacios
+        Session::put([
+            'frase_actual' => $phraseSeleccionada->phrase,
+            'movie_actual' => $phraseSeleccionada->movie,
+            'letras_encontradas' => []
+        ]);
+
+
         return view('wheelfireclub.panel', [
-            'phraseSeleccionada' => $this -> phraseSeleccionada -> phrase, 'title' => $this -> phraseSeleccionada -> movie
+            'phraseSeleccionada' => $phraseSeleccionada->phrase,
+            'title' => $phraseSeleccionada->movie,
+            'letrasEncontradas' => Session::get('letras_encontradas', [])
         ]);
     }
 
-    public function comprobarLetra(){
-         $this -> phraseSeleccionada;
+    public function store(Request $request)
+    {
+        // Recibir la letra del request
+        $letra = $request->input('letra');
+
+        // Obtener datos de sesión
+        $frase = Session::get('frase_actual');
+        $letrasEncontradas = Session::get('letras_encontradas', []);
+        $response = [];
+        // Verificar si la letra está en la frase (case insensitive)
+        //Si está en la frase la añadimos al array de letras encontradas y devolvemos 
+        // un json con success true, la letra, las letras encontradas
+        if (str_contains(strtoupper($frase), strtoupper($letra))) {
+            $letrasEncontradas[] = strtoupper($letra);
+            Session::put('letras_encontradas', $letrasEncontradas);
+            $response = [
+                'success' => true,
+                'letra' => strtoupper($letra),
+                'letrasEncontradas' => $letrasEncontradas
+            ];
+            //Si no está en la frase devolvemos un json con success false, la letra, las letras encontradas
+        } else {
+            $response = [
+                'success' => false,
+                'letra' => strtoupper($letra),
+                'letrasEncontradas' => $letrasEncontradas
+            ];
+        }
+
+        return response()->json($response);
     }
 }
