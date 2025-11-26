@@ -1,0 +1,1073 @@
+/* Reset y layout */
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    min-height:100vh;
+    background:#111;
+    color:#fff;
+    font-family:Inter, system-ui, sans-serif;
+    padding:20px;
+    width:100%;
+}
+
+/* ELIMINAR MAX-WIDTH PARA OCUPAR TODO EL ANCHO */
+.contenedor-juego{ width:100%; text-align:center; }
+
+/* Marco de la ruleta */
+.marco-ruleta{
+    position:relative;
+    width:350px;
+    height:350px;
+    margin:0 auto 10px;
+}
+
+/* Flecha (abajo) */
+#flecha{
+    position:absolute;
+    bottom:-36px;
+    left:50%;
+    font-size:36px;
+    color:#f1c40f;
+    z-index:20;
+    pointer-events: none;
+}
+
+/* Ruleta: conic-gradient para sectores */
+#ruleta{
+    width:100%;
+    height:100%;
+    position:relative;
+    transition: transform 4s cubic-bezier(0.1,0.7,0.1,1);
+    pointer-events: none;
+}
+
+/* Hacemos que la imagen se adapte perfectamente */
+#ruleta img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transform: scale(1.02); 
+}
+
+/* sectores invisibles para colocar iconos */
+.sector{
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
+    display:flex;
+    justify-content:center;
+    transform: rotate(calc(45deg * var(--i)));
+}
+
+.fruta{
+    margin-top:22px;
+    font-size:30px;
+    transform: rotate(22.5deg);
+}
+
+/* Botón */
+#btnGirar{
+    margin-top:8px;
+    padding:12px 24px;
+    background:#8b0000;
+    color:#fff;
+    border:0;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:1.1rem;
+}
+#btnGirar:disabled{ opacity:0.5; cursor:not-allowed; }
+
+/* Resultado y temporizador */
+#resultado{ margin-top:15px; font-size:1.2rem; font-weight:bold; color:#ffd700; }
+#temporizador{ font-size:1.5rem; font-weight:bold; color:#00ff00; }
+
+/* efecto-temporizador (animación y colores) */
+.efecto-temporizador{
+    position:relative;
+    height:26px;
+    margin-top:6px;
+    font-weight:800;
+    transition: opacity .4s;
+    opacity:1;
+}
+
+/* colores específicos */
+.efecto-temporizador.positivo{ color:#37d67a; }        /* verde */
+.efecto-temporizador.rojo-claro{ color:#ff8b82; }     /* rojo claro */
+.efecto-temporizador.rojo-medio{ color:#ff4d4d; }     /* rojo medio */
+.efecto-temporizador.rojo-intenso{ color:#cc0018; }   /* rojo intenso */
+
+/* ---------------------------------- */
+/* ESTILOS CSS PARA POSICIONAMIENTO Y DISEÑO */
+/* ---------------------------------- */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+/* Contenedor principal del abecedario - COLOR ROJO COMO PANEL CENTRAL */
+#alphabet-sidebar {
+    position: fixed;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%);
+    border-radius: 12px;
+    border: 0.5rem solid #8b0000;
+    box-shadow: 
+        0 0 20px rgba(139, 0, 0, 0.7),
+        inset 0 0 30px rgba(139, 0, 0, 0.3),
+        0 0 0 2px #000,
+        0 0 0 4px #8b0000;
+    z-index: 100;
+}
+
+/* Estilos para cada tecla (DIV) - COLOR ROJO */
+.key-container {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #8b0000, #a30000);
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.4rem;
+    border: 2px solid #ff0000;
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.key-container:hover:not(.disabled) {
+    transform: scale(1.1);
+    box-shadow: 
+        0 4px 15px rgba(255, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, #a30000, #8b0000);
+}
+
+.key-container.disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+    position: relative;
+    transform: scale(0.95);
+    background: linear-gradient(135deg, #4a0000, #2a0000);
+    border-color: #660000;
+}
+
+/* Estilo para la imagen dentro del DIV */
+.key-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 6px;
+}
+
+/* Estilo para el área de mensajes de resultado */
+#result-display {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px;
+    background-color: #333;
+    color: white;
+    border-radius: 8px;
+    border-left: 4px solid #ffd700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 100;
+    display: none;
+    max-width: 300px;
+}
+
+/* PANEL CENTRAL MEJORADO - EVITA QUE LAS FRASES SE SALGAN */
+.panel-container {
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%);
+    width: 95%;
+    margin: auto;
+    min-height: 200px;
+    max-height: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    padding: 1.5rem;
+    align-content: flex-start;
+    justify-content: center;
+    border-radius: 12px;
+    border: 0.5rem solid #8b0000;
+    box-shadow: 
+        0 0 20px rgba(139, 0, 0, 0.7),
+        inset 0 0 30px rgba(139, 0, 0, 0.3),
+        0 0 0 2px #000,
+        0 0 0 4px #8b0000;
+    position: relative;
+    overflow: hidden;
+    overflow-y: auto; /* Scroll si es necesario */
+}
+
+/* Efecto de luz roja parpadeante */
+.panel-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(139, 0, 0, 0.1) 0%, transparent 70%);
+    animation: flicker 4s infinite alternate;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+    75% { opacity: 0.4; }
+}
+
+.cabecera {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.titulo-panel {
+    margin: auto;
+    padding: 1rem 2rem;
+    font-family: 'Courier New', monospace;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff0000,
+        0 0 30px #ff0000;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #8b0000, #ff0000, #8b0000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    0% { 
+        text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+        filter: brightness(1);
+    }
+    100% { 
+        text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000;
+        filter: brightness(1.2);
+    }
+}
+
+/* PALABRAS MEJORADAS - EVITA QUE SE SALGAN */
+.palabra {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    margin: 0 0.3rem;
+    padding: 0.3rem;
+    background: rgba(139, 0, 0, 0.1);
+    border-radius: 4px;
+    border: 1px solid rgba(139, 0, 0, 0.3);
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.letra {
+    position: relative;
+    width: 3rem;
+    height: 3rem;
+    margin: 0.1rem;
+    perspective: 1000px;
+    flex-shrink: 0;
+}
+
+.postit {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 3px;
+    filter: sepia(0.3) brightness(0.9);
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.letra.revelada .postit {
+    transform: rotateY(180deg);
+    filter: sepia(0) brightness(1.1) hue-rotate(320deg);
+}
+
+.letra-texto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #e10000;
+    opacity: 0;
+    z-index: 10;
+    transition: opacity 0.1s 0.1s;
+    text-shadow: 
+        0 0 5px #e10000,
+        0 0 10px #e10000;
+    background: rgba(0, 20, 0, 0.3);
+    border-radius: 3px;
+    border: 1px solid rgba(0, 255, 0, 0.2);
+}
+
+.letra.revelada .letra-texto {
+    opacity: 1;
+    animation: letterGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes letterGlow {
+    0% { 
+        text-shadow: 0 0 5px #700000, 0 0 10px #700000;
+        box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+    100% { 
+        text-shadow: 0 0 8px #700000, 0 0 15px #700000, 0 0 20px #700000;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+}
+
+.espacio {
+    width: 1rem;
+    height: 3rem;
+    margin: 0.1rem;
+    flex-shrink: 0;
+}
+
+/* Efecto de scan lines */
+.panel-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 0, 0.03) 2px,
+        rgba(0, 255, 0, 0.03) 4px
+    );
+    pointer-events: none;
+    animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+/* ===== NUEVA ESTRUCTURA QUE OCUPA TODO EL ANCHO ===== */
+
+.layout-container {
+    display: grid;
+    grid-template-areas: 
+        "header header header"
+        "alphabet board info"
+        "alphabet wheel controls";
+    grid-template-columns: auto 1fr 350px;
+    grid-template-rows: auto 1fr auto;
+    gap: 25px;
+    min-height: 100vh;
+    padding: 25px;
+    width: 100%;
+    max-width: none; /* ELIMINAR LÍMITE MÁXIMO */
+}
+
+.header {
+    grid-area: header;
+    text-align: center;
+    padding: 15px;
+}
+
+.alphabet-panel {
+    grid-area: alphabet;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.board-panel {
+    grid-area: board;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.wheel-panel {
+    grid-area: wheel;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.info-panel {
+    grid-area: info;
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%);
+    padding: 25px;
+    border-radius: 12px;
+    border: 0.4rem solid #8b0000;
+    box-shadow: 
+        0 0 15px rgba(139, 0, 0, 0.6),
+        inset 0 0 20px rgba(139, 0, 0, 0.2);
+}
+
+.controls-panel {
+    grid-area: controls;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%);
+    padding: 25px;
+    border-radius: 12px;
+    border: 0.4rem solid #8b0000;
+    box-shadow: 
+        0 0 15px rgba(139, 0, 0, 0.6),
+        inset 0 0 20px rgba(139, 0, 0, 0.2);
+}
+
+/* Estilos para el panel de información del jugador */
+.player-info-card {
+    background: rgba(139, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(139, 0, 0, 0.5);
+    margin-bottom: 20px;
+}
+
+.player-info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+}
+
+.player-info-label {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.player-info-value {
+    color: #fff;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Estilos para el botón Adivinar */
+.guess-section {
+    background: rgba(0, 100, 0, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    margin-top: 20px;
+}
+
+#btnAdivinar, .control-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #8b0000, #a30000);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 12px;
+    border: 2px solid #ff0000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+#btnAdivinar:hover, .control-btn:hover {
+    background: linear-gradient(135deg, #a30000, #8b0000);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+}
+
+#btnAdivinar:disabled, .control-btn:disabled {
+    background: linear-gradient(135deg, #4a0000, #2a0000);
+    border-color: #660000;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Modal para adivinar frase */
+.guess-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.guess-modal-content {
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+    padding: 35px;
+    border-radius: 12px;
+    border: 0.5rem solid #8b0000;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 
+        0 0 30px rgba(139, 0, 0, 0.8),
+        inset 0 0 20px rgba(139, 0, 0, 0.3);
+}
+
+.guess-input {
+    width: 100%;
+    padding: 15px;
+    margin: 20px 0;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #8b0000;
+    border-radius: 8px;
+    color: white;
+    font-size: 1.2rem;
+    font-family: 'Courier New', monospace;
+}
+
+.guess-input:focus {
+    outline: none;
+    border-color: #ff0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.guess-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.guess-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid;
+}
+
+.guess-confirm {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border-color: #2e7d32;
+}
+
+.guess-confirm:hover {
+    background: linear-gradient(135deg, #45a049, #4CAF50);
+    transform: translateY(-2px);
+}
+
+.guess-cancel {
+    background: linear-gradient(135deg, #f44336, #da190b);
+    color: white;
+    border-color: #b71c1c;
+}
+
+.guess-cancel:hover {
+    background: linear-gradient(135deg, #da190b, #f44336);
+    transform: translateY(-2px);
+}
+
+/* Mejoras para la ruleta en el centro */
+.wheel-container {
+    text-align: center;
+}
+
+.wheel-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* Estados del juego */
+.game-over {
+    filter: grayscale(0.8);
+    pointer-events: none;
+}
+
+.victory-message {
+    background: rgba(0, 255, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #4CAF50;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.game-over-message {
+    background: rgba(255, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #f44336;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Indicadores de estado */
+.timer-warning {
+    color: #ffa500 !important;
+    animation: pulse 1s infinite;
+    background: rgba(255, 165, 0, 0.2) !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    border: 1px solid #ffa500 !important;
+}
+
+.timer-danger {
+    color: #ff4444 !important;
+    animation: pulse 0.5s infinite;
+    background: rgba(255, 0, 0, 0.2) !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    border: 1px solid #ff4444 !important;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* ===== ESTILOS MEJORADOS PARA LETRAS TACHADAS ===== */
+.key-container.disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+    position: relative;
+    transform: scale(0.95);
+    background: linear-gradient(135deg, #4a0000, #2a0000);
+    border-color: #660000;
+}
+
+/* Efecto de tachado rojo vistoso */
+.key-container.disabled::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(90deg, #ff0000, #ff4444, #ff0000);
+    transform: rotate(-45deg);
+    z-index: 10;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+    animation: tachado-glow 2s ease-in-out infinite alternate;
+}
+
+.key-container.disabled::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(90deg, #ff0000, #ff4444, #ff0000);
+    transform: rotate(45deg);
+    z-index: 10;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+    animation: tachado-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes tachado-glow {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+        background: linear-gradient(90deg, #ff0000, #ff4444, #ff0000);
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(255, 0, 0, 1), 0 0 20px rgba(255, 0, 0, 0.5);
+        background: linear-gradient(90deg, #ff4444, #ff0000, #ff4444);
+    }
+}
+
+/* Estilo para letras activas */
+.key-container.vocal-active {
+    background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+    border-color: #d35400 !important;
+    animation: vocal-pulse 2s infinite;
+}
+
+.key-container.consonante-active {
+    background: linear-gradient(135deg, #3498db, #2980b9) !important;
+    border-color: #1f618d !important;
+    animation: consonante-pulse 2s infinite;
+}
+
+@keyframes vocal-pulse {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(243, 156, 18, 0.5); 
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(243, 156, 18, 0.8), 0 0 30px rgba(243, 156, 18, 0.4); 
+    }
+}
+
+@keyframes consonante-pulse {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(52, 152, 219, 0.5); 
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(52, 152, 219, 0.8), 0 0 30px rgba(52, 152, 219, 0.4); 
+    }
+}
+
+/* Responsive para pantallas muy grandes */
+@media (min-width: 1600px) {
+    .layout-container {
+        grid-template-columns: auto 1fr 400px;
+        gap: 30px;
+        padding: 30px;
+    }
+    
+    .panel-container {
+        max-height: 350px;
+    }
+    
+    .key-container {
+        width: 70px;
+        height: 70px;
+        font-size: 1.6rem;
+    }
+}
+
+/* Responsive para tablets */
+@media (max-width: 1024px) {
+    .layout-container {
+        grid-template-areas: 
+            "header"
+            "board" 
+            "wheel"
+            "alphabet"
+            "info"
+            "controls";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 20px;
+    }
+    
+    .alphabet-panel {
+        position: static;
+        transform: none;
+        margin: 20px 0;
+    }
+    
+    #alphabet-sidebar {
+        position: static;
+        transform: none;
+        margin: 0 auto;
+        max-width: 600px;
+    }
+    
+    .panel-container {
+        max-height: 250px;
+    }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .layout-container {
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .panel-container {
+        max-height: 200px;
+        padding: 1rem;
+    }
+    
+    .letra {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+    
+    .key-container {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    #alphabet-sidebar {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+        padding: 10px;
+    }
+}
+
+/* ================================================== */
+/* ===== CORRECCIONES ESPECÍFICAS URGENTES ===== */
+/* ================================================== */
+
+/* 1. ELIMINAR TODAS LAS BARRAS DESLIZADORAS */
+body {
+    overflow: hidden !important;
+}
+
+.layout-container {
+    overflow: hidden !important;
+}
+
+.alphabet-panel {
+    overflow: hidden !important;
+}
+
+.board-panel {
+    overflow: hidden !important;
+}
+
+.panel-container {
+    overflow: hidden !important;
+    overflow-y: hidden !important;
+}
+
+.info-panel,
+.controls-panel,
+.wheel-panel {
+    overflow: hidden !important;
+}
+
+/* 2. ABECEDARIO COMPLETO VISIBLE - SIN SCROLL */
+#alphabet-sidebar {
+    position: static !important;
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    grid-template-rows: repeat(7, 1fr) !important;
+    gap: 8px !important;
+    padding: 10px !important;
+    overflow: hidden !important;
+    max-height: none !important;
+}
+
+/* 3. PANEL CENTRAL - AJUSTE AUTOMÁTICO DE TAMAÑO */
+.board-panel .panel-container {
+    height: auto !important;
+    min-height: 150px !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 15px !important;
+}
+
+#frase-container {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    padding: 10px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+/* 4. LAYOUT OPTIMIZADO PARA EVITAR CUALQUIER SCROLL */
+.layout-container {
+    display: grid;
+    grid-template-areas: 
+        "header header header"
+        "alphabet board info"
+        "alphabet wheel controls";
+    grid-template-columns: 280px 1fr 350px;
+    grid-template-rows: auto auto auto;
+    gap: 15px;
+    min-height: 100vh;
+    max-height: 100vh;
+    padding: 15px;
+    width: 100%;
+    overflow: hidden !important;
+}
+
+/* 5. TAMAÑOS DE FUENTE Y ELEMENTOS OPTIMIZADOS */
+.palabra {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    margin: 0 2px;
+    padding: 2px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.letra {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    margin: 1px;
+    flex-shrink: 0;
+}
+
+.letra-texto {
+    font-size: 1.2rem !important;
+}
+
+.key-container {
+    width: 55px !important;
+    height: 55px !important;
+    font-size: 1.2rem !important;
+}
+
+/* 6. ELIMINAR SCROLLBARS EN TODOS LOS NAVEGADORES */
+.panel-container::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.panel-container {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+}
+
+.alphabet-panel::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* 7. RESPONSIVE SIN SCROLL */
+@media (max-width: 1200px) {
+    .layout-container {
+        grid-template-columns: 250px 1fr 300px;
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    #alphabet-sidebar {
+        grid-template-columns: repeat(3, 1fr) !important;
+        grid-template-rows: repeat(9, 1fr) !important;
+    }
+    
+    .key-container {
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .layout-container {
+        grid-template-areas: 
+            "header"
+            "board" 
+            "wheel"
+            "alphabet"
+            "info"
+            "controls";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 10px;
+        padding: 10px;
+        max-height: none !important;
+    }
+    
+    #alphabet-sidebar {
+        grid-template-columns: repeat(6, 1fr) !important;
+        grid-template-rows: repeat(5, 1fr) !important;
+        min-height: auto !important;
+    }
+    
+    .key-container {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.1rem !important;
+    }
+    
+    .letra {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+    
+    .letra-texto {
+        font-size: 1rem !important;
+    }
+}
+
+/* 8. GARANTIZAR QUE NO HAY SCROLL EN NINGÚN ELEMENTO */
+* {
+    scrollbar-width: none !important;
+}
+
+*::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* 9. AJUSTE PERFECTO DEL PANEL CENTRAL */
+.panel-container {
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+#frase-container {
+    line-height: 1;
+    max-height: none !important;
+}
+
+/* 10. ELIMINAR CUALQUIER POSIBILIDAD DE OVERFLOW */
+html, body {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+/* 11. JUEGO SE DETIENE CUANDO ACABA EL TIEMPO */
+.juego-inactivo {
+    pointer-events: none !important;
+    opacity: 0.7 !important;
+    filter: grayscale(0.8) !important;
+}
+
+.juego-inactivo .key-container {
+    pointer-events: none !important;
+}
+
+.juego-inactivo #btnGirar,
+.juego-inactivo #btnAdivinar,
+.juego-inactivo .control-btn {
+    pointer-events: none !important;
+    opacity: 0.5 !important;
+}
