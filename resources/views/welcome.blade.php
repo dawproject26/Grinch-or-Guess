@@ -33,7 +33,6 @@
                 <img src="{{ asset('img/dustin.png') }}" alt="Avatar 4" data-avatar-id="4">
                 <img src="{{ asset('img/will.png') }}" alt="Avatar 5" data-avatar-id="5">
             </div>
-            <input type="hidden" name="selected_avatar" id="selected-avatar-input" value="avatar1.png">
         </div>
 
         <form action="{{ route('player.login') }}" method="POST">
@@ -55,40 +54,36 @@
 </div>
 
 <script>
-    // Código para el botón INICIAR SESIÓN (open-gate-button)
     document.getElementById('login-button').addEventListener('click', function(){
         document.querySelector('.scene-container').classList.add('open');
     });
 
-    // Código para el botón REGISTRARSE (register-button)
     document.getElementById('register-button').addEventListener('click', function(){
         document.querySelector('.scene-container').classList.add('open');
     });
 
     const avatarDisplay = document.getElementById('avatar-display');
     const avatarImages = avatarDisplay.querySelectorAll('img');
-    const selectedAvatarInput = document.getElementById('selected-avatar-input');
-    let currentAvatarIndex = 0; // El índice del avatar actualmente visible
+    const idAvatarInput = document.getElementById('idavatar');
+    let currentAvatarIndex = 0; 
 
-    // Función para actualizar la visualización y el input oculto
     function updateAvatarDisplay() {
-        const offset = -currentAvatarIndex * 175; // 175px es la altura de cada imagen
+        const offset = -currentAvatarIndex * 175; 
         avatarDisplay.style.transform = `translateY(${offset}px)`;
 
-        // Actualizar el valor del input oculto con la ruta del avatar seleccionado
-        const selectedImageSrc = avatarImages[currentAvatarIndex].getAttribute('src');
-        selectedAvatarInput.value = selectedImageSrc.split('/').pop(); // Solo el nombre del archivo (e.g., "avatar1.png")
+        const selectedId = avatarImages[currentAvatarIndex].getAttribute('data-avatar-id');
+        
+        if(idAvatarInput) {
+            idAvatarInput.value = selectedId;
+        }
     }
 
-    // Event listener para cuando se hace clic en el selector de avatares
     document.querySelector('.avatar-selector').addEventListener('click', function() {
-        currentAvatarIndex = (currentAvatarIndex + 1) % avatarImages.length; // Pasa al siguiente avatar (ciclo)
+        currentAvatarIndex = (currentAvatarIndex + 1) % avatarImages.length; 
         updateAvatarDisplay();
     });
 
-    // Inicializar el display al cargar la página
     updateAvatarDisplay();
 </script>
 </body>
 </html>
-
