@@ -10,6 +10,10 @@
 <div class="scene-container">
 
     <div id="mundo-real" class="world">
+        @if(session('error'))
+            <div class="error">{{session('error')}}</div>
+        @endif 
+
         <div class="centered-title"> 
             <span class="stranger-things-text">WHEELFIRE CLUB</span>
         </div>
@@ -31,10 +35,18 @@
             </div>
             <input type="hidden" name="selected_avatar" id="selected-avatar-input" value="avatar1.png">
         </div>
+
+        <form action="{{ route('player.login') }}" method="POST">
+            @csrf
+            <input id="cuadrotexto" type="text" name="name" placeholder="Nombre" required>
+            <button id="botonjugar" class="stranger-things-text" type="submit">JUGAR</button>
+        </form>  
+
         <form action="{{ route('player.register') }}" method="POST">
             @csrf
             <input id="cuadrotexto" type="text" name="name" placeholder="Nombre" required>
             <button id="botonjugar" class="stranger-things-text" type="submit">JUGAR</button>
+            <input type="hidden" name="idavatar" id="idavatar" value="1">
         </form>  
     </div>
 

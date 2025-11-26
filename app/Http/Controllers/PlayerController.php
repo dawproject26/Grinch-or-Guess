@@ -48,7 +48,8 @@ class PlayerController extends Controller
         ]);
 
         $player = Player::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'idavatar'=> $request->idavatar
         ]);
 
         Score::create([
