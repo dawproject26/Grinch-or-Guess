@@ -1,3 +1,166 @@
+# Documentación del Proyecto
+
+## PanelController.php
+
+### Descripción General
+Controlador de Laravel encargado de gestionar la lógica principal del juego de adivinanzas. Maneja las sesiones de jugadores, la ruleta, el temporizador y la verificación de letras.
+
+### Ubicación
+`App\Http\Controllers\PanelController`
+
+### Dependencias
+- `App\Models\Phrase` - Modelo para las frases del juego
+- `App\Models\Player` - Modelo para los jugadores
+- `App\Models\Timer` - Modelo para gestionar temporizadores
+- `Illuminate\Http\Request` - Manejo de peticiones HTTP
+- `Illuminate\Support\Facades\Session` - Gestión de sesiones
+
+---
+
+## Métodos
+
+### 1. `index()`
+**Descripción:** Inicializa el panel del juego y carga una frase aleatoria.
+
+**Lógica:**
+- Verifica que el jugador haya iniciado sesión
+- Obtiene una frase aleatoria de la base de datos
+- Si no hay frases, utiliza una frase por defecto ("CICLO SIN FIN" de "EL REY LEÓN")
+- Inicializa la sesión del juego con las variables necesarias
+- Crea un temporizador de 180 segundos (3 minutos) si no existe
+- Retorna la vista `panel.index` con los datos de la frase
+
+**Parámetros:** Ninguno
+
+**Retorna:** Vista HTML o redirección a la página de bienvenida
+
+---
+
+### 2. `temporizador()`
+**Descripción:** Retorna el tiempo restante del temporizador actual.
+
+**Lógica:**
+- Verifica que exista una sesión de jugador
+- Busca el temporizador asociado al jugador
+- Si no existe, crea uno nuevo con 180 segundos
+- Retorna los segundos restantes en formato JSON
+
+**Parámetros:** Ninguno
+
+**Retorna:** JSON con `segundos_restantes` o error 401 si no hay sesión
+
+---
+
+### 3. `girar(Request $request)`
+**Descripción:** Procesa el giro de la ruleta y aplica sus efectos.
+
+**Parámetros:**
+- `$request->opcion` - Opción seleccionada de la ruleta
+
+**Efectos de la ruleta:**
+- `DEMOPERRO` - Resta 5 segundos
+- `DEMOGORGON` - Resta 10 segundos
+- `VECNA` - Resta 15 segundos
+- `ELEVEN` - Suma 20 segundos
+- `VOCAL` - Limita las letras a vocales únicamente
+- `CONSONANTE` - Limita las letras a consonantes únicamente
+
+**Lógica:**
+- Valida la sesión del jugador
+- Obtiene o crea el temporizador
+- Aplica los efectos según la opción seleccionada
+- El tiempo no puede ser negativo (mínimo 0)
+- Guarda la opción actual en la sesión si es VOCAL o CONSONANTE
+- Actualiza el temporizador en la base de datos
+
+**Retorna:** JSON con `segundos_restantes` y `opcion_actual`
+
+---
+
+### 4. `letra(Request $request)`
+**Descripción:** Verifica si una letra existe en la frase y aplica restricciones de la ruleta.
+
+**Parámetros:**
+- `$request->letra` - Letra a verificar
+
+**Validaciones:**
+- Si la ruleta está en modo VOCAL, solo acepta vocales (A, E, I, O, U)
+- Si la ruleta está en modo CONSONANTE, rechaza vocales
+
+**Lógica:**
+- Convierte la letra a mayúscula
+- Verifica si existe en la frase actual
+- Si existe y no ha sido adivinada, se agrega a la lista de letras adivinadas
+- Retorna el resultado en JSON
+
+**Retorna:** JSON con `success`, `letra` y `letras_adivinadas`
+
+---
+
+### 5. `checkLetter(Request $request)`
+**Descripción:** Búsqueda avanzada que retorna todas las posiciones de una letra en la frase.
+
+**Parámetros:**
+- `$request->letra` - Letra a buscar
+
+**Lógica:**
+- Convierte la letra y frase a mayúscula
+- Itera sobre cada carácter de la frase
+- Registra todas las posiciones donde aparece la letra
+- Retorna un array con las posiciones encontradas
+
+**Retorna:** JSON con `existe`, `posiciones` (array de índices) y `letra`
+
+---
+
+### 6. `reset()`
+**Descripción:** Reinicia el juego limpiando la sesión y el temporizador.
+
+**Lógica:**
+- Olvida todas las variables de sesión del juego
+- Restablece el temporizador a 180 segundos
+- Redirige a `/panel` para comenzar una nueva partida
+
+**Parámetros:** Ninguno
+
+**Retorna:** Redirección a `/panel`
+
+---
+
+## Variables de Sesión Utilizadas
+
+| Variable | Tipo | Descripción |
+|----------|------|-------------|
+| `player_id` | Integer | ID único del jugador |
+| `player_name` | String | Nombre del jugador |
+| `frase_actual` | String | Frase a adivinar |
+| `movie_actual` | String | Película de la que proviene la frase |
+| `letras_adivinadas` | Array | Letras que ha adivinado el jugador |
+| `opcion_ruleta_actual` | String | Restricción actual (VOCAL/CONSONANTE) |
+
+---
+
+## Flujo del Juego
+
+1. Usuario accede a `/panel` → Se ejecuta `index()`
+2. Se carga una frase aleatoria y se inicia un temporizador de 3 minutos
+3. Usuario gira la ruleta → Se ejecuta `girar()`
+4. Según el resultado, se aplican efectos de tiempo o restricciones
+5. Usuario selecciona una letra → Se ejecuta `letra()`
+6. Se verifica si existe y se actualiza la lista de adivinadas
+7. Se usa `checkLetter()` para mostrar las posiciones de la letra
+8. Cuando termina la partida → Se ejecuta `reset()` para jugar de nuevo
+
+---
+
+## Notas Técnicas
+
+- El temporizador se decrementa automáticamente en el frontend
+- Las frases se almacenan en la base de datos (tabla `phrases`)
+- Cada jugador tiene su propia sesión independiente
+- El tiempo mínimo es 0 segundos (no puede ser negativo)
+- La validación de vocales/consonantes es case-insensitive (se convierte a mayúscula)
+
 # Documentación del PlayerController
 
 ## Descripción General
