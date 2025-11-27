@@ -9,6 +9,11 @@
 
 <div class="scene-container">
 
+    <audio loop muted id="background-music" preload="auto">
+        <source src="{{ asset('audio/music.mp3') }}" type="audio/mpeg">
+        <source src="{{ asset('audio/music.ogg') }}" type="audio/ogg">
+    </audio>
+
     <div id="mundo-real" class="world">
         @if(session('error'))
             <div class="error">{{session('error')}}</div>
@@ -69,6 +74,7 @@
     // --- Lógica de Apertura del Portal y Visibilidad de Formularios ---
     const loginWrapper = document.getElementById('login-form-wrapper');
     const registerWrapper = document.getElementById('register-form-wrapper');
+    const backgroundMusic = document.getElementById('background-music');
 
     document.getElementById('login-button').addEventListener('click', function(){
         document.querySelector('.scene-container').classList.add('open');
@@ -87,6 +93,28 @@
             window.location.href = '/ranking';
     });
 
+    function enableAudioHandler() {
+        if (backgroundMusic) {
+            // 1. Quitar el silencio y ajustar volumen
+            backgroundMusic.volume = 0.5; // Ajusta el volumen a tu gusto
+            backgroundMusic.muted = false; 
+
+            // 2. Intentar reproducir el audio
+            backgroundMusic.play()
+                .then(() => {
+                    console.log("Música iniciada con el primer clic.");
+                })
+                .catch(error => {
+                    console.error("Error al iniciar audio:", error);
+                });
+            
+            // 3. Eliminar este listener para que el código solo se ejecute una vez
+            document.removeEventListener('click', enableAudioHandler);
+        }
+    }
+
+    // 4. Adjuntar el evento de escucha a todo el documento
+    document.addEventListener('click', enableAudioHandler);
     // --- Lógica del Avatar ---
     const avatarDisplay = document.getElementById('avatar-display');
     const avatarImages = avatarDisplay.querySelectorAll('img');

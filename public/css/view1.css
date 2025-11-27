@@ -29,6 +29,8 @@ body{
     top: 0;
     left: 0;
     overflow: hidden; /* Seguridad adicional */
+    transform: translateZ(0); 
+    will-change: transform;
 }
  
 .world {
@@ -49,6 +51,8 @@ body{
     background-position: center;
     pointer-events: none;
     z-index: 5;
+    transform: translateZ(0); 
+    will-change: transform;
    
     /* === AJUSTE CLAVE AQUÍ === */
     /* Inicialmente, la grieta es muy estrecha, con un pequeño 'fade' en los bordes */
@@ -117,15 +121,9 @@ body{
     -webkit-text-stroke-color: #ce0000;
 
     /* 2. EFECTO NEÓN (Resplandor) */
-    text-shadow: 
-        0 0 1px #ff0000,   /* Brillo interno más intenso */
-        0 0 3px #ff0000,   
-        0 0 5px #ff0000,   
-        0 0 8px #ff0000,   
-        0 0 15px #ff0000,  
-        0 0 25px #ff0000,  
-        0 0 40px #ff0000,  
-        0 0 60px #ff0000;  /* El halo más grande y difuminado */
+   text-shadow: 
+        0 0 5px #ff0000,    /* Sombra más intensa */
+        0 0 15px #ff0000;   /* Resplandor más suave */
 }
 
 
@@ -261,6 +259,8 @@ body{
     background: rgba(0, 0, 0, 0.7); 
     box-shadow: 0 0 10px #e20000; 
     transition: box-shadow 0.3s ease; 
+    transform: translateZ(0); 
+    will-change: transform;
     
     /* Posicionamiento del avatar */
     top: 33%;
@@ -278,6 +278,7 @@ body{
     display: flex;
     flex-direction: column; 
     width: 100%;
+    will-change: transform;
     transition: transform 0.5s ease-in-out; 
 }
 
