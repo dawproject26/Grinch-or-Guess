@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wheel Fire Club - BOJACK HORSEMAN</title>
+    <title>Wheel Fire Club - {{ $title ?? 'Juego' }}</title>
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -13,7 +13,7 @@
         
         <!-- HEADER -->
         <div class="header">
-            <h1 class="titulo-panel">BOJACK HORSEMAN</h1>
+            <h1 class="titulo-panel" id="movie-title">{{ $title ?? 'BOJACK HORSEMAN' }}</h1>
         </div>
 
         <!-- PANEL DEL ABECEDARIO (IZQUIERDA) -->
@@ -75,7 +75,7 @@
                 <h3>Información del Jugador</h3>
                 <div class="player-info-item">
                     <span class="player-info-label">Jugador:</span>
-                    <span class="player-info-value">Raut</span>
+                    <span class="player-info-value">{{ session('player_name', 'Invitado') }}</span>
                 </div>
                 <div class="player-info-item">
                     <span class="player-info-label">Puntaje:</span>
@@ -123,8 +123,12 @@
         let temporizadorInterval;
         let letrasUsadas = [];
         let opcionRuletaActual = null;
-        let fraseActual = "BOJACK HORSEMAN";
-        let movieActual = "BOJACK HORSEMAN";
+        
+        // VARIABLES DINÁMICAS DESDE LARAVEL
+        let fraseActual = "{{ Session::get('frase_actual', 'BOJACK HORSEMAN') }}";
+        let movieActual = "{{ Session::get('movie_actual', 'BOJACK HORSEMAN') }}";
+        let playerName = "{{ session('player_name', 'Invitado') }}";
+        
         let puntuacion = 0;
         let juegoActivo = true;
 
@@ -149,6 +153,10 @@
         // ===== INICIALIZACIÓN =====
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Inicializando juego...');
+            console.log('Frase actual:', fraseActual);
+            console.log('Película actual:', movieActual);
+            console.log('Jugador:', playerName);
+            
             iniciarTemporizador();
             actualizarFraseDisplay();
             
@@ -157,7 +165,8 @@
             document.getElementById('btnAdivinar').addEventListener('click', openGuessModal);
             
             // Mostrar título de la película
-            document.querySelector('.titulo-panel').textContent = movieActual;
+            document.getElementById('movie-title').textContent = movieActual;
+            document.querySelector('.player-info-value:nth-child(1)').textContent = playerName;
 
             // Cargar tiempo desde servidor
             cargarTiempoDesdeServidor();
@@ -165,7 +174,7 @@
 
         // ===== TEMPORIZADOR =====
         function cargarTiempoDesdeServidor() {
-            fetch("/panel/temporizador", {
+            fetch("{{ route('panel.temporizador') }}", {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -308,7 +317,7 @@
                 tiempoRestante = Math.max(0, tiempoRestante + cambioTiempo);
                 actualizarTemporizadorDisplay();
 
-                fetch("/panel/girar", {
+                fetch("{{ route('panel.girar') }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -408,14 +417,19 @@
             const fraseContainer = document.getElementById('frase-container');
             fraseContainer.innerHTML = '';
             
-            const palabras = fraseActual.split(' ');
+            // Limpiar y normalizar la frase
+            const fraseLimpia = fraseActual.toUpperCase().replace(/[^A-Z\s]/g, '');
+            const palabras = fraseLimpia.split(' ').filter(palabra => palabra.length > 0);
+            
+            console.log('Frase procesada:', fraseLimpia);
+            console.log('Palabras:', palabras);
             
             palabras.forEach(palabra => {
                 const palabraDiv = document.createElement('div');
                 palabraDiv.className = 'palabra';
                 
                 for (let i = 0; i < palabra.length; i++) {
-                    const letra = palabra[i].toUpperCase();
+                    const letra = palabra[i];
                     const letraDiv = document.createElement('div');
                     letraDiv.className = 'letra';
                     letraDiv.setAttribute('data-letra', letra);
@@ -430,6 +444,7 @@
                 
                 fraseContainer.appendChild(palabraDiv);
                 
+                // Agregar espacio entre palabras (excepto después de la última)
                 if (palabras.indexOf(palabra) < palabras.length - 1) {
                     const espacio = document.createElement('div');
                     espacio.className = 'espacio';
@@ -439,6 +454,7 @@
                 }
             });
 
+            // Revelar letras que ya fueron adivinadas
             letrasUsadas.forEach(letra => revelarLetra(letra));
             ajustarTamañoPanel();
         }
@@ -447,13 +463,15 @@
             const fraseContainer = document.getElementById('frase-container');
             const panelContainer = document.querySelector('.panel-container');
             
-            // Calcular tamaño necesario basado en el contenido
-            const contenidoHeight = fraseContainer.scrollHeight;
-            const maxHeight = window.innerHeight * 0.3;
-            
-            // Ajustar altura del panel
-            panelContainer.style.height = 'auto';
-            panelContainer.style.minHeight = Math.min(contenidoHeight, maxHeight) + 'px';
+            if (fraseContainer && panelContainer) {
+                // Calcular tamaño necesario basado en el contenido
+                const contenidoHeight = fraseContainer.scrollHeight;
+                const maxHeight = window.innerHeight * 0.3;
+                
+                // Ajustar altura del panel
+                panelContainer.style.height = 'auto';
+                panelContainer.style.minHeight = Math.min(contenidoHeight, maxHeight) + 'px';
+            }
         }
 
         function actualizarAbecedario() {
@@ -515,6 +533,7 @@
 
             const fraseCorrecta = fraseActual.toUpperCase();
             if (guess === fraseCorrecta) {
+                // Revelar todas las letras
                 document.querySelectorAll('.letra').forEach(letra => {
                     letra.classList.add('revelada');
                     const letraOculta = letra.getAttribute('data-letra');
@@ -535,12 +554,14 @@
             
             mostrarMensaje('🎉 ¡FELICIDADES! Has completado la frase +100 puntos', 'success');
             
+            // Deshabilitar controles
             btnGirar.disabled = true;
             document.querySelectorAll('.key-container').forEach(btn => {
                 btn.style.pointerEvents = 'none';
             });
             document.getElementById('btnAdivinar').disabled = true;
             
+            // Aplicar clase de juego inactivo a todo el layout
             document.querySelector('.layout-container').classList.add('juego-inactivo');
         }
 
@@ -550,12 +571,14 @@
             
             mostrarMensaje('⏰ ¡GAME OVER! Tiempo agotado', 'error');
             
+            // Deshabilitar controles
             btnGirar.disabled = true;
             document.querySelectorAll('.key-container').forEach(btn => {
                 btn.style.pointerEvents = 'none';
             });
             document.getElementById('btnAdivinar').disabled = true;
             
+            // Aplicar clase de juego inactivo a todo el layout
             document.querySelector('.layout-container').classList.add('juego-inactivo');
         }
 
@@ -565,6 +588,7 @@
             resultDisplay.textContent = mensaje;
             resultDisplay.style.display = 'block';
             
+            // Colores según el tipo
             const colores = {
                 'success': '#4CAF50',
                 'error': '#f44336', 
@@ -582,13 +606,13 @@
 
         function resetGame() {
             if (confirm('¿Estás seguro de que quieres reiniciar el juego?')) {
-                window.location.reload();
+                window.location.href = '{{ route("panel.reset") }}';
             }
         }
 
         function logout() {
             if (confirm('¿Estás seguro de que quieres salir?')) {
-                window.location.href = '/logout';
+                window.location.href = '{{ route("player.logout") }}';
             }
         }
 
@@ -604,6 +628,7 @@
         // Ajustar panel cuando cambie el tamaño de la ventana
         window.addEventListener('resize', ajustarTamañoPanel);
 
+        // Observar cambios en las letras después de que se cargue el DOM
         setTimeout(() => {
             document.querySelectorAll('.letra').forEach(letra => {
                 observer.observe(letra, { attributes: true, attributeFilter: ['class'] });

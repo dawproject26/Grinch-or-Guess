@@ -29,6 +29,9 @@
                         </thead>
                         <tbody>
                             @foreach($topPlayers as $index => $user)
+                            @if($index >= 5)
+                                @break
+                            @endif                           
                             <tr>
                                 <td>
                                     <strong>#{{ $index + 1 }}</strong>
