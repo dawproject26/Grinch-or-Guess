@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-/* Estilos generales */
-.scene-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-=======
 /*
  * -----------------------------------------------------
  * 1. RESETS Y ANTI-SCROLL (CLAVE)
@@ -39,7 +31,6 @@ body{
     overflow: hidden; /* Seguridad adicional */
     transform: translateZ(0); 
     will-change: transform;
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
 }
  
 .world {
@@ -59,12 +50,6 @@ body{
     background-size: cover;
     background-position: center;
     pointer-events: none;
-<<<<<<< HEAD
-    z-index: 5; /* Asegura que la grieta está por encima de los mundos */
-   
-    /* === CLAVE: Inicialmente, la grieta es muy estrecha === */
-    clip-path: polygon(48% 0, 52% 0, 52% 100%, 48% 100%);
-=======
     z-index: 5;
     transform: translateZ(0); 
     will-change: transform;
@@ -78,18 +63,12 @@ body{
         calc(50% + 2%) 100%, /* Derecha, abajo */
         calc(50% - 2%) 100%  /* Izquierda, abajo */
     );
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
     transition: clip-path 1.5s ease-in-out;
 }
  
 /* El Mundo del Revés está oculto al inicio */
 #upside-down {
     opacity: 0;
-<<<<<<< HEAD
-}
- 
-/* Estilos para el botón */
-=======
     z-index: 5;
 }
  
@@ -155,7 +134,6 @@ body{
  */
  
 /* Estilos para el botón INICIAR SESIÓN */
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
 .centered-button {
     position: absolute;
     top: 50%;
@@ -166,20 +144,6 @@ body{
     background: rgba(0, 0, 0, 0.7);
     border: 3px solid #e20000;
     border-radius: 10px;
-<<<<<<< HEAD
-    z-index: 10; /* Asegura que el botón está por encima de todo */
-}
-
-.centered-button:hover {
-    box-shadow: 0 0 20px #e20000; /* Más brillo al pasar el ratón */
-}
- 
-.centered-button2 {
-    position: absolute;
-    top: 50%;
-    right: 15%;
-    transform: translate(-50%, -50%);
-=======
     z-index: 10;
 }
 
@@ -193,31 +157,11 @@ body{
     top: 50%;
     right: 15%; 
     transform: translate(-50%, -50%); 
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
     cursor: pointer;
     padding: 15px 30px;
     background: rgba(0, 0, 0, 0.7);
     border: 3px solid #e20000;
     border-radius: 10px;
-<<<<<<< HEAD
-    z-index: 10; /* Asegura que el botón está por encima de todo */
-}
-
-.centered-button2:hover {
-    box-shadow: 0 0 20px #e20000; /* Más brillo al pasar el ratón */
-}
-
-.stranger-things-text {
-    /* Aquí usarías tu fuente ITC Benguiat y el efecto neón */
-    font-family: 'ITC Benguiat', serif;
-    color: #e20000;
-    text-shadow: 0 0 10px #e20000;
-}
- 
-/* --- DECLARACIÓN DE IMÁGENES (CONSOLIDADA) --- */
-#mundo-real {
-    /* Ruta corregida: asumiendo que "img" es la carpeta y el CSS está fuera */
-=======
     z-index: 10;
 }
 
@@ -352,36 +296,22 @@ body{
  * -----------------------------------------------------
  */
 #mundo-real {
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
     background-image: url("../img/view1.png");
 }
  
 #upside-down {
-<<<<<<< HEAD
-    /* Ruta corregida: asumiendo que "img" es la carpeta y el CSS está fuera */
-=======
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
     background-image: url("../img/view2.png");
 }
  
 #crack {
-<<<<<<< HEAD
-    /* Ruta corregida: asumiendo que "img" es la carpeta y el CSS está fuera */
-=======
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
     background-image: url("../img/grieta_sola.png");
 }
  
- 
-<<<<<<< HEAD
-/* === Estado de Apertura: Lo que ocurre al añadir la clase 'open' al contenedor === */
-=======
 /*
  * -----------------------------------------------------
  * 7. ESTADO DE APERTURA (Al añadir la clase 'open')
  * -----------------------------------------------------
  */
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
 .scene-container.open #crack {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
@@ -393,59 +323,12 @@ body{
 .scene-container.open #upside-down {
     opacity: 1;
 }
- 
-<<<<<<< HEAD
-.scene-container.open #open-gate-button {
-=======
+
 .scene-container.open #login-button,
 .scene-container.open #register-button {
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
     opacity: 0;
     pointer-events: none;
 }
-
-<<<<<<< HEAD
-/* Nuevo estilo para el Título Centrado */
-.centered-title {
-    position: absolute;
-    /* Centra horizontalmente */
-    left: 52%;
-    /* Ajusta la posición vertical (e.g., al 15% de la altura de la pantalla) */
-    top: 25%; 
-    /* Mueve el elemento 50% de su propio ancho/alto hacia arriba/izquierda para centrarlo */
-    transform: translate(-50%, -50%); 
-    z-index: 10;
-    
-    /* Estilo adicional para que se vea como un título grande */
-    font-size: 5em; /* Puedes ajustar el tamaño */
-    padding: 20px;
-    border-radius: 10px;
-}
-
-/* El texto del título usa la clase existente */
-.centered-title .stranger-things-text {
-    text-shadow: 0 0 10px #000000, 0 0 20px #000000; 
-}
-
-/* Estilo del Formulario: Centra el contenedor y usa Flexbox */
-#upside-down form {
-    /* Elimina el posicionamiento del botón y lo aplica al formulario */
-    position: absolute;
-    top: 50%;
-    left: 55%;
-    transform: translate(-50%, -50%); /* Centra el formulario completo */
-    display: flex; /* Coloca los elementos uno al lado del otro */
-    align-items: center; /* Alineación vertical */
-    gap: 20px; /* Espacio entre el input y el botón */
-    z-index: 10;
-}
-
-/* Modificación de #botonjugar: Debe ser estático ahora */
-#botonjugar{
-    /* Quitar el posicionamiento absoluto que ya no es necesario */
-    position: static; 
-    transform: none; 
-=======
 /*
  * -----------------------------------------------------
  * 8. BOTÓN RANKING
@@ -457,80 +340,14 @@ body{
     top: 68%;
     left: 48.5%;
     transform: none; /* Elimina la traducción que lo movía */
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
     cursor: pointer;
     padding: 15px 30px;
     background: rgba(0, 0, 0, 0.7);
     border: 3px solid #e20000;
     border-radius: 10px;
-<<<<<<< HEAD
-}
-
-#botonjugar:hover {
-    box-shadow: 0 0 20px #e20000; /* Más brillo al pasar el ratón */
-}
-
-/* Estilo del Cuadro de Texto */
-#cuadrotexto{
-    /* Fondo semi-transparente y borde del botón */
-    background: rgba(0, 0, 0, 0.7);
-    border: 3px solid #e20000;
-    border-radius: 10px;
-    padding: 15px 30px; /* Mismo padding para que el alto sea igual */
-    
-    /* Color del texto (coincide con el neón rojo) */
-    color: #e20000;
-    
-    /* Ajuste para que el texto del placeholder también sea rojo */
-    font-size: 1.2em; /* Haz la fuente legible */
-}
-
-/* Selector específico para asegurar que el placeholder sea visible y rojo */
-#cuadrotexto::placeholder {
-    color: #e20000;
-    opacity: 0.7; /* Ligeramente más tenue que el texto escrito */
-}
-
-/* Estilos para el contenedor del selector de avatar */
-.avatar-selector {
-    width: 175px; /* Ancho fijo para el área visible del avatar */
-    height: 175px; /* Alto fijo para el área visible del avatar */
-    border: 3px solid #e20000; /* Borde rojo como los otros elementos */
-    border-radius: 50%; /* Hace que el selector sea redondo */
-    overflow: hidden; /* Oculta las partes de las imágenes que están fuera del círculo */
-    position: relative; /* Para posicionar el display de avatares dentro */
-    cursor: pointer; /* Indica que es clickeable */
-    background: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
-    box-shadow: 0 0 10px #e20000; /* Efecto neón suave */
-    transition: box-shadow 0.3s ease; /* Transición para el brillo al pasar el ratón */
-    top: 40%;
-    left: 32.5%;
-}
-
-.avatar-selector:hover {
-    box-shadow: 0 0 20px #e20000; /* Más brillo al pasar el ratón */
-}
-
-/* Contenedor de las imágenes de avatar (el que rotará) */
-.avatar-display {
-    display: flex;
-    flex-direction: column; /* Coloca las imágenes una encima de otra */
-    width: 100%;
-    transition: transform 0.5s ease-in-out; /* Animación de la rotación */
-}
-
-/* Estilos de las imágenes de avatar */
-.avatar-display img {
-    width: 100%; /* Las imágenes ocupan todo el ancho del selector */
-    height: 175px; /* Ajusta el alto para que encajen */
-    object-fit: cover; /* Recorta la imagen si es necesario para que encaje */
-    display: block; /* Elimina espacio extra debajo de las imágenes */
-}
-=======
     z-index: 10;
 }
  
 .ranking-top-right:hover {
     box-shadow: 0 0 20px #e20000; 
 }
->>>>>>> a6ec4d26b32a841eb7e2124ed9c27d0b4a3f0a44
