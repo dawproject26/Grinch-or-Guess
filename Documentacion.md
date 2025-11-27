@@ -1872,6 +1872,253 @@ protected function casts(): array
 **Conversiones:**
 - `email_verified_at`: Se convierte a objeto DateTime/Carbon
 - `password`: Se encripta automáticamente al asignarlo
+
+
+
+
+  # Documentación del DatabaseSeeder
+
+## Descripción General
+Este archivo define el seeder principal de la base de datos en una aplicación Laravel. Es el punto de entrada para poblar la base de datos con datos iniciales o de prueba.
+
+**Línea 1:** `<?php` - Tag de apertura de PHP
+
+**Línea 2:** `namespace Database\Seeders;` - Define el namespace donde se ubica esta clase seeder. Todos los seeders en Laravel se organizan bajo Database\Seeders
+
+**Línea 3:** `use App\Models\User;` - Importa el modelo User (no utilizado en el código actual, puede ser removido o fue dejado para uso futuro)
+
+**Línea 4:** `use Illuminate\Database\Console\Seeds\WithoutModelEvents;` - Importa el trait WithoutModelEvents que desactiva eventos de modelo durante el seeding para mejorar el rendimiento
+
+**Línea 5:** `use Illuminate\Database\Seeder;` - Importa la clase base Seeder de Laravel de la que heredará DatabaseSeeder. Es la clase abstracta que proporciona funcionalidad base a todos los seeders
+
+**Línea 6:** `use Database\Seeders\PanelSeeder;` - Importa el PanelSeeder personalizado que será llamado desde este seeder para poblar datos relacionados con paneles
+
+**Línea 7:** `use Illuminate\Support\Facades\Hash;` - Importa la facade Hash para encriptar contraseñas (no utilizada en el código actual, puede ser removida o fue dejada para uso futuro)
+
+**Línea 8:** `class DatabaseSeeder extends Seeder` - Declara la clase DatabaseSeeder que extiende de la clase base Seeder. Esta es la clase principal que Laravel ejecuta automáticamente al correr el comando php artisan db:seed
+
+**Línea 9:** `{` - Apertura del cuerpo de la clase
+
+**Línea 10:** `use WithoutModelEvents;` - Incorpora el trait WithoutModelEvents en la clase. Esto evita que se disparen eventos de modelo como creating, created, updating, updated, deleting, deleted durante el proceso de seeding, mejorando significativamente el rendimiento y evitando efectos secundarios no deseados
+
+**Líneas 11-13:** Bloque de documentación PHPDoc que describe el propósito del método run(). Este comentario es útil para IDEs y herramientas de documentación automática
+
+**Línea 14:** `public function run(): void` - Define el método público run() que Laravel ejecuta automáticamente. No recibe parámetros y no retorna ningún valor (: void). Este método contiene la lógica principal para ejecutar todos los seeders de la aplicación
+
+**Línea 15:** `{` - Apertura del cuerpo del método run()
+
+**Línea 16:** `$this->call([` - Invoca el método call() heredado de la clase base Seeder. Este método acepta un array de clases seeder y las ejecuta secuencialmente en el orden especificado
+
+**Línea 17:** `PanelSeeder::class,  // Línea para llamar al seeder de Panel` - Especifica que se ejecute el PanelSeeder usando la sintaxis de clase (::class). Este seeder se encarga de poblar datos relacionados con paneles en la base de datos. El comentario aclara su propósito
+
+**Línea 18:** `]);` - Cierra el array de seeders y la llamada al método call()
+
+**Línea 19:** `}` - Cierre del cuerpo del método run()
+
+**Línea 20:** `}` - Cierre del cuerpo de la clase DatabaseSeeder
+
+## Flujo de Ejecución
+
+1. Se ejecuta el comando php artisan db:seed en la terminal
+2. Laravel busca automáticamente la clase DatabaseSeeder en el directorio database/seeders/
+3. Laravel instancia la clase DatabaseSeeder y invoca su método run()
+4. El método call() procesa el array de seeders proporcionado
+5. Se instancia la clase PanelSeeder y se ejecuta su método run()
+6. PanelSeeder pobla la tabla de paneles con los datos definidos
+7. El proceso finaliza y retorna el control a la consola
+
+## Análisis de Componentes
+
+### Namespace (Línea 2)
+El namespace Database\Seeders es la convención estándar de Laravel para organizar todos los seeders de la aplicación en un mismo espacio de nombres lógico.
+
+### Imports no Utilizados (Líneas 3 y 7)
+Las clases User y Hash están importadas pero no se utilizan en el código actual. Esto puede indicar código legacy, preparación para funcionalidad futura, o simplemente imports olvidados que pueden ser eliminados de forma segura.
+
+### Trait WithoutModelEvents (Línea 10)
+Este trait es crucial para el rendimiento del seeding. Sin él, cada operación de creación/actualización dispararía eventos de Eloquent, observers, y potencialmente jobs en cola, lo que ralentizaría significativamente el proceso de seeding y podría causar efectos secundarios no deseados en desarrollo.
+
+### Método call() (Línea 16)
+El método call() es proporcionado por la clase base Seeder y ofrece las siguientes ventajas:
+- Ejecuta múltiples seeders en un orden específico
+- Maneja automáticamente la instanciación de cada seeder
+- Proporciona feedback en consola sobre qué seeder se está ejecutando
+- Permite encadenar múltiples seeders con dependencias entre ellos
+
+### PanelSeeder (Línea 17)
+La sintaxis PanelSeeder::class utiliza la resolución de nombres de clase de PHP, lo que proporciona autocompletado en IDEs y detección de errores en tiempo de compilación si la clase no existe.
+
+## Notas Importantes
+
+### Extensibilidad
+Para agregar más seeders, simplemente añádelos al array en el método call():
+
+```php
+$this->call([
+    PanelSeeder::class,
+    UserSeeder::class,
+    RoleSeeder::class,
+    PermissionSeeder::class,
+]);
+```
+
+
+# Documentación del PanelSeeder
+
+## Descripción General
+Este seeder se encarga de poblar la base de datos con un panel principal y una colección de 123 frases célebres de películas y series. Todas las frases se asocian al mismo panel, creando una estructura de datos relacionada.
+
+## Estructura del Archivo
+
+### Namespace e Imports
+El archivo pertenece al namespace `Database\Seeders`, siguiendo la convención estándar de Laravel para seeders. Se importan varias clases y facades:
+
+- **WithoutModelEvents**: Trait que desactiva los eventos de modelo durante el seeding, mejorando el rendimiento
+- **Seeder**: Clase base de Laravel que proporciona la funcionalidad fundamental para todos los seeders
+- **DB, Hash, Str**: Facades importadas pero no utilizadas en el código actual
+- **Phrase y Panel**: Modelos Eloquent que representan las tablas de frases y paneles respectivamente
+
+### Declaración de la Clase
+La clase `PanelSeeder` extiende de `Seeder` y no incluye el trait `WithoutModelEvents` en su implementación, a pesar de haberlo importado.
+
+## Método run()
+
+### Verificación y Creación del Panel
+El método comienza buscando el primer panel existente en la base de datos mediante `Panel::first()`. Si no existe ningún panel (retorna `null`), se crea uno nuevo con el título "Panel Principal". Esta lógica asegura que siempre exista al menos un panel antes de insertar las frases, evitando errores de clave foránea.
+
+```php
+$panel = Panel::first();
+if (!$panel) {
+    $panel = Panel::create(['title' => 'Panel Principal']);
+}
+```
+
+### Definición del Array de Frases
+Se define un array llamado `$phrases` que contiene 123 elementos. Cada elemento es un array asociativo con dos claves:
+- **movie**: Nombre de la película o serie en mayúsculas
+- **phrase**: Texto de la frase célebre en mayúsculas
+
+El array está organizado en tres secciones diferenciadas por comentarios:
+
+**Frases Originales** (23 frases)
+Incluye películas clásicas y populares como 300, Matrix, Terminator, Gladiator, Star Wars, y otras producciones icónicas del cine.
+
+**Nuevas Frases Añadidas** (100 frases)
+Sección ampliada que incorpora series modernas como Breaking Bad, Juego de Tronos, Dark, Stranger Things, y animes populares como Naruto, Dragon Ball, One Piece, entre muchas otras.
+
+**Extras**
+Subsección dentro de las nuevas frases que incluye películas de superhéroes, animación y fantasía para completar las 100 frases adicionales.
+
+### Inserción de Datos
+El seeder utiliza un bucle `foreach` para iterar sobre cada elemento del array de frases. En cada iteración:
+
+1. Se accede al array `$phraseData` que contiene los datos de una frase específica
+2. Se llama al método estático `create()` del modelo `Phrase`
+3. Se pasan tres campos al método create:
+   - `movie`: Extraído de `$phraseData['movie']`
+   - `phrase`: Extraído de `$phraseData['phrase']`
+   - `panel_id`: ID del panel creado o encontrado previamente
+
+```php
+foreach ($phrases as $phraseData) {
+    Phrase::create([
+        'movie' => $phraseData['movie'],
+        'phrase' => $phraseData['phrase'],
+        'panel_id' => $panel->id,
+    ]);
+}
+```
+
+# Documentación del RouletteSeeder
+
+## Descripción General
+Este seeder pobla la base de datos con las opciones disponibles para una ruleta. Inserta 8 opciones que incluyen elementos del juego (vocales y consonantes) y personajes de la serie Stranger Things, creando una mecánica de juego temática.
+
+## Estructura del Archivo
+
+### Namespace e Imports
+El archivo pertenece al namespace `Database\Seeders`. Se importan únicamente dos clases:
+
+- **Seeder**: Clase base de Laravel que proporciona la funcionalidad fundamental para los seeders
+- **Roulette**: Modelo Eloquent que representa la tabla de opciones de ruleta en la base de datos
+
+La implementación es minimalista, sin imports innecesarios o facades no utilizadas.
+
+### Declaración de la Clase
+La clase `RouletteSeeder` extiende de `Seeder` sin implementar traits adicionales. Es una implementación directa y simple enfocada exclusivamente en poblar la tabla de ruleta.
+
+## Método run()
+
+### Definición del Array de Opciones
+El método comienza definiendo un array llamado `$options` que contiene 8 elementos de tipo string. Estas opciones representan los posibles resultados al girar la ruleta:
+
+```php
+$options = [
+    'VOCAL',
+    'VOCAL',
+    'CONSONANTE',
+    'CONSONANTE',
+    'VECNA',
+    'DEMOGORGON',
+    'DEMOPERRO',
+    'ELEVEN'
+];
+```
+
+**Composición del array:**
+- **2 opciones de VOCAL**: Permiten al jugador elegir una vocal duplicando la probabilidad de este resultado
+- **2 opciones de CONSONANTE**: Permiten al jugador elegir una consonante con doble probabilidad
+- **4 opciones de personajes**: Vecna, Demogorgon, Demoperro y Eleven, personajes de Stranger Things que probablemente activan eventos especiales en el juego
+
+La duplicación de VOCAL y CONSONANTE ajusta las probabilidades de la ruleta, dándoles un 25% de probabilidad cada uno, mientras que cada personaje tiene un 12.5% de probabilidad individual.
+
+### Inserción de Datos
+Se utiliza un bucle `foreach` simple que itera sobre cada elemento del array de opciones:
+
+```php
+foreach ($options as $opt) {
+    Roulette::create([
+        'option' => $opt
+    ]);
+}
+```
+
+En cada iteración:
+1. Se toma la opción actual almacenada en la variable `$opt`
+2. Se invoca el método estático `create()` del modelo `Roulette`
+3. Se crea un registro con un único campo `option` que contiene el valor de la opción
+
+Este proceso genera 8 registros individuales en la tabla de ruleta, uno por cada opción definida.
+
+## Flujo de Ejecución Completo
+
+1. **Inicialización**: Se invoca el método `run()` del seeder
+2. **Definición de Opciones**: Se prepara el array con las 8 opciones de la ruleta
+3. **Iteración**: Se recorre cada opción del array secuencialmente
+4. **Inserción**: Se crea un registro en la tabla `roulette` por cada opción
+5. **Finalización**: El proceso termina tras insertar las 8 opciones
+
+## Estructura de Datos Resultante
+
+### Tabla Roulette
+Se crean 8 registros, cada uno con:
+- **id**: Identificador único autogenerado por la base de datos
+- **option**: Texto de la opción (string en mayúsculas)
+- **timestamps**: created_at y updated_at (si están habilitados en el modelo)
+
+## Distribución y Mecánica
+
+El seeder configura una ruleta con:
+- **25% de probabilidad**: Obtener VOCAL (2 de 8 opciones)
+- **25% de probabilidad**: Obtener CONSONANTE (2 de 8 opciones)
+- **12.5% de probabilidad por cada personaje**: Vecna, Demogorgon, Demoperro, Eleven (4 opciones únicas)
+
+**Temática del juego:**
+La ruleta combina mecánicas tradicionales de juegos de palabras (como La Ruleta de la Fortuna) con elementos de la serie Stranger Things, sugiriendo que:
+- VOCAL y CONSONANTE permiten al jugador avanzar en resolver palabras o frases
+- Los personajes probablemente activan eventos especiales, penalizaciones o bonificaciones temáticas de la serie
+
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
